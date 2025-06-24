@@ -92,220 +92,241 @@ Sistem manajemen manpower yang modern dan profesional untuk mengelola data karya
    ```bash
    git clone <repository-url>
    cd MP_dev
-   # atau download ZIP dan extract
-   ```
 
-2. **Buka di VS Code**
-   ```bash
-   cd mp-development
-   code .
-   ```
+  2.Install Dependencies
+  composer install
 
-3. **Install Live Server Extension**
-   - Buka Extensions (Ctrl+Shift+X)
-   - Search "Live Server"
-   - Install extension dari Ritwick Dey
+  3. Database Setup
 
-4. **Run Project**
-   - Klik kanan pada `index.html`
-   - Pilih "Open with Live Server"
-   - Browser akan otomatis terbuka di http://localhost:5500
+- Buat database baru di MySQL: mp_development
+- Import schema dari sql/schema.sql
 
-## 📁 File Structure
+CREATE DATABASE mp_development;
+USE mp_development;
+SOURCE sql/schema.sql;
 
-```
-mp-development/
+4. Environment Configuration
+
+- Copy .env.example ke .env (jika ada)
+- Edit backend/database.php sesuai konfigurasi database Anda
+
+private $host = "localhost";
+private $db_name = "mp_development";
+private $username = "your_username";
+private $password = "your_password";
+
+5. Web Server Setup
+
+- Pindahkan folder project ke htdocs (XAMPP) atau www (WAMP)
+- Atau setup virtual host
+- Akses melalui: http://localhost/MP_dev/mpdev/
+
+6. Test Connection
+php test_connection.php
+
+7.File Structure
+   MP_dev/
 │
-├── 📄 index.html          # Main HTML file
-├── 📁 css/
-│   └── 📄 style.css       # All CSS styles
-├── 📁 js/
-│   └── 📄 script.js       # All JavaScript functionality
-├── 📁 assets/             # Images, icons (if needed)
-│   ├── 📁 images/
-│   └── 📁 icons/
-└── 📄 README.md           # Documentation
-```
+├── 📄 README.md              # Dokumentasi project
+├── 📄 .env                   # Environment variables
+├── 📄 composer.json          # PHP dependencies
+├── 📄 test_connection.php    # Database connection test
+│
+├── 📁 assets/                # Static assets
+│   ├── 📄 favicon.ico
+│   ├── 📁 icons/            # App icons
+│   └── 📁 images/           # Images
+│
+├── 📁 backend/               # Backend logic
+│   └── 📄 database.php      # Database connection class
+│
+├── 📁 backups/               # Database backups
+│   ├── 📄 backup_*.json     # JSON backups
+│   └── 📄 backup_*.csv      # CSV backups
+│
+├── 📁 sql/                   # Database schema
+│   └── 📄 schema.sql        # Database structure
+│
+├── 📁 vendor/                # Composer dependencies
+│   ├── 📁 phpmailer/        # Email library
+│   └── 📄 autoload.php      # Composer autoloader
+│
+└── 📁 mpdev/                 # Main application
+    ├── 📄 auth_check.php     # Authentication middleware
+    ├── 📄 login.php          # Login page
+    ├── 📄 logout.php         # Logout handler
+    ├── 📄 unauthorized.php   # Access denied page
+    │
+    ├── 📁 css/               # Stylesheets
+    │   ├── 📄 sidebar.css    # Sidebar styling
+    │   ├── 📄 dashboard.css  # Dashboard specific
+    │   ├── 📄 employees.css  # Employee module
+    │   ├── 📄 login-style.css # Login page
+    │   └── 📄 style.css      # Global styles
+    │
+    ├── 📁 js/                # JavaScript files
+    │   ├── 📄 script.js      # Main functionality
+    │   ├── 📄 employees.js   # Employee module
+    │   ├── 📄 auth.js        # Authentication
+    │   └── 📄 browser-info.js # Browser detection
+    │
+    ├── 📄 dashboard.php      # Main dashboard
+    ├── 📄 workspace.php      # Workspace hub
+    ├── 📄 employees.php      # Employee management
+    ├── 📄 education.php      # Education management
+    ├── 📄 education_schedule.php # Education scheduling
+    ├── 📄 end_contracts.php  # Contract management
+    ├── 📄 replacement.php    # Replacement tracking
+    ├── 📄 mapping.php        # Manpower mapping
+    ├── 📄 sk_comp_assy.php   # Skill Matrix Comp Assy
+    ├── 📄 sk_wclutch.php     # Skill Matrix WClutch
+    ├── 📄 overtime.php       # Overtime management
+    └── 📄 settings.php       # System settings
 
+  ##  Database Schema
+### Main Tables
+- employees - Data karyawan utama
+- education - Data program edukasi
+- end_contracts - Data kontrak berakhir
+- replacement - Data replacement karyawan
+- skill_matrix_comp_assy - Skill matrix Comp Assy
+- skill_matrix_wclutch - Skill matrix WClutch
+- overtime - Data overtime karyawan
+- users - User authentication
+### Key Features
+- Foreign key relationships
+- Indexed columns untuk performance
+- Timestamp tracking (created_at, updated_at)
+- Soft delete support
+## 📱 Modules
+### 🏠 Dashboard
+- Real-time statistics dan KPI
+- Interactive charts (Chart.js)
+- Summary cards untuk setiap modul
+- Filter berdasarkan periode
+### 📋 Database MP
+- CRUD lengkap untuk data karyawan
+- Auto-generate NPK
+- Advanced search dan filter
+- Export ke Excel/CSV
+- Bulk operations
+### 🎓 Edukasi
+- Manajemen program pelatihan
+- Tracking sertifikasi
+- Searchable "Nama Pos" dengan Select2
+- Status tracking (Planned, Completed, etc.)
+### 📊 Skill Matrix
+- Comp Assy : 47 proses kerja
+- WClutch : 11 proses kerja
+- Visual skill indicators (0-4 levels)
+- Sticky columns untuk easy navigation
+- Real-time skill level updates
+### 🗺️ Mapping MP
+- Pemetaan karyawan per section dan line
+- Interactive charts untuk visualisasi
+- Filter berdasarkan section, line, status
+- Summary cards untuk quick overview
+### ⏰ Overtime
+- Tracking jam overtime karyawan
+- Kalkulasi otomatis
+- Reporting dan analytics
+- Export functionality
+## 🔐 Authentication & Authorization
+### User Roles
+- Admin - Full access ke semua modul
+- Manager - Management level access
+- SPV - Supervisor level access
+- Trainer - Education module focus
+- Leader - Team leader access
+- Foreman - Operational access
+### Security Features
+- Session-based authentication
+- Role-based access control
+- SQL injection protection (PDO prepared statements)
+- XSS protection
+- CSRF protection
 ## 💡 Usage
-
-### Basic Operations
-
-#### 1. Navigasi
-- Klik menu di sidebar untuk berpindah antar modul
-- Dashboard menampilkan overview dan statistik
-
-#### 2. Menambah Data Karyawan
-- Masuk ke menu "Database MP"
-- Klik tombol "+ Tambah Karyawan"
-- Isi form lengkap
-- Klik "Simpan"
-
-#### 3. Edit Data
-- Klik tombol "Edit" pada baris data
-- Ubah data sesuai kebutuhan
-- Klik "Simpan"
-
-#### 4. Hapus Data
-- Klik tombol "Delete" pada baris data
-- Konfirmasi penghapusan
-
-#### 5. Pencarian
-- Gunakan search box untuk mencari data
-- Hasil akan difilter secara real-time
-
-### Advanced Features
-
-#### Export Data
-```javascript
-// Panggil function exportToCSV() di console
-exportToCSV();
-```
-
-#### Custom NPK Generation
-NPK akan otomatis di-generate dengan format NPK001, NPK002, dst.
-
-## ⌨️ Keyboard Shortcuts
-
-| Shortcut | Action |
-|----------|--------|
-| `Ctrl + N` | Tambah karyawan baru (dalam Database MP) |
-| `Escape` | Tutup modal |
-| `Ctrl + S` | Simpan form (dalam modal) |
-
-## 🎨 Customization
-
-### Mengubah Warna Theme
-Edit file `css/style.css`:
-
-```css
-/* Ubah gradient sidebar */
-.sidebar {
-    background: linear-gradient(135deg, #your-color1 0%, #your-color2 100%);
-}
-
-/* Ubah warna primary */
-.btn-primary {
-    background: #your-primary-color;
-}
-```
-
-### Menambah Field Baru
-1. Edit form di `index.html`:
-```html
-<div class="form-group">
-    <label for="newField">Field Baru</label>
-    <input type="text" id="newField" name="newField">
-</div>
-```
-
-2. Update table header di `index.html`
-3. Update JavaScript di `js/script.js` untuk handle field baru
-
-### Menambah Section Baru
-1. Tambah navigation item di sidebar
-2. Buat section baru dengan id unik
-3. Update JavaScript navigation handler
-
+### Login
+1. Akses http://localhost/MP_dev/mpdev/login.php
+2. Masukkan credentials
+3. Sistem akan redirect ke dashboard sesuai role
+### Navigation
+- Gunakan sidebar untuk navigasi antar modul
+- Workspace sebagai central hub
+- Breadcrumb navigation
+### Data Management
+- Setiap modul memiliki CRUD functionality
+- Real-time search dan filter
+- Export data ke Excel/CSV
+- Bulk operations untuk efficiency
 ## 🔧 Development
+### Adding New Module
+1. Buat file PHP baru di mpdev/
+2. Include auth_check.php untuk authentication
+3. Tambahkan navigation link di sidebar
+4. Buat CSS specific jika diperlukan
+5. Update database schema jika perlu
 
-### Struktur CSS
-```
-style.css
-├── Reset & Base Styles
-├── Sidebar Styles
-├── Main Content Styles
-├── Dashboard Cards
-├── Content Section Styles
-├── Button Styles
-├── Table Styles
-├── Status Badge Styles
-├── Modal Styles
-├── Form Styles
-├── Utility Classes
-└── Responsive Styles
-```
+   Database Operations
+   // Contoh penggunaan database class
+require_once '../backend/database.php';
+$db = new Database();
+$conn = $db->getConnection();
 
-### JavaScript Modules
-```
-script.js
-├── Navigation Functionality
-├── CRUD Functionality
-├── Search Functionality
-├── Auto-generate NPK
-├── Notification System
-├── Clock Functionality
-├── Data Export
-├── Data Validation
-├── Keyboard Shortcuts
-├── Mobile Menu Toggle
-└── Error Handling
-```
+$stmt = $conn->prepare("SELECT * FROM employees WHERE status = ?");
+$stmt->execute(['Aktif']);
+$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-## 📱 Mobile Responsiveness
+Adding Charts
+// Contoh implementasi Chart.js
+const ctx = document.getElementById('myChart').getContext('2d');
+const chart = new Chart(ctx, {
+    type: 'bar',
+    data: chartData,
+    options: chartOptions
+});
 
-- ✅ Responsive sidebar (hamburger menu)
-- ✅ Optimized table scrolling
-- ✅ Touch-friendly buttons
-- ✅ Adaptive grid layouts
-- ✅ Mobile-first form design
 
-## 🔐 Data Security
-
-- Form validation pada client-side
-- NPK uniqueness check
-- Input sanitization
-- Error handling untuk stability
-
-## 🚀 Future Enhancements
-
-- [ ] Database integration (MySQL/PostgreSQL)
-- [ ] User authentication & authorization
-- [ ] Role-based access control
-- [ ] Advanced reporting & analytics
-- [ ] Email notifications
-- [ ] File upload untuk foto karyawan
-- [ ] Bulk import/export
-- [ ] Advanced filtering & sorting
-- [ ] Print functionality
-- [ ] Multi-language support
-
+##  Future Enhancements
+- API REST untuk mobile app
+- Real-time notifications dengan WebSocket
+- Advanced reporting dengan PDF export
+- Multi-language support
+- Dark/Light theme toggle
+- Advanced analytics dashboard
+- Mobile app (React Native/Flutter)
+- Integration dengan HR systems
+- Automated backup scheduling
+- Performance monitoring
 ## 🐛 Troubleshooting
-
 ### Common Issues
-
-1. **Live Server tidak jalan**
-   - Pastikan extension terinstall
-   - Restart VS Code
-   - Klik kanan pada index.html → Open with Live Server
-
-2. **Modal tidak muncul**
-   - Check console untuk error JavaScript
-   - Pastikan semua file ter-link dengan benar
-
-3. **Styling tidak muncul**
-   - Pastikan path CSS benar: `css/style.css`
-   - Check browser developer tools
-
-4. **JavaScript error**
-   - Buka browser console (F12)
-   - Check error message
-   - Pastikan script.js ter-load
-
+1. Database Connection Error
+   
+   - Check database credentials di backend/database.php
+   - Pastikan MySQL service running
+   - Test dengan test_connection.php
+2. Permission Denied
+   
+   - Check file permissions (755 untuk folders, 644 untuk files)
+   - Pastikan web server memiliki akses ke folder
+3. Composer Dependencies
+composer install --no-dev
+composer dump-autoload
+4. 1. JavaScript Errors
+   
+   - Check browser console (F12)
+   - Pastikan semua library ter-load
+   - Check network tab untuk failed requests
 ## 📞 Support
+Untuk support dan pertanyaan:
 
-Jika ada pertanyaan atau issue:
-1. Check dokumentasi ini terlebih dahulu
+1. Check dokumentasi ini
 2. Check browser console untuk error
-3. Pastikan semua file ada di folder yang benar
-4. Restart Live Server
-
+3. Verify database connection
+4. Check server error logs
 ## 📄 License
+This project is proprietary software for internal company use.
 
-This project is open source and available under the [MIT License](LICENSE).
+Happy Coding! 🎉
 
----
-
-**Happy Coding! 🎉**
-
-> Dibuat dengan ❤️ untuk memudahkan manajemen manpower di perusahaan Anda.
+Sistem MP Development - Solusi modern untuk manajemen manpower yang efisien dan profesional.
